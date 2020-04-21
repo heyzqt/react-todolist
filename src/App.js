@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import "./style.css";
+import { CSSTransition } from "react-transition-group";
 
 class App extends React.Component {
   constructor(props) {
@@ -19,7 +20,18 @@ class App extends React.Component {
   render() {
     return (
       <Fragment>
-        <div className={this.state.isShow ? "show" : "hide"}>hello world</div>
+        <CSSTransition
+          in={this.state.isShow}
+          timeout={300}
+          unmountOnExit
+          onEnter={(el) => {
+            el.style.color = "red";
+          }}
+          classNames="fade"
+          appear={true}
+        >
+          <div>hello world</div>
+        </CSSTransition>
         <button onClick={this.handleClick}>change state</button>
       </Fragment>
     );
