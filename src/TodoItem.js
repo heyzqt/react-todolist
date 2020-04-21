@@ -16,7 +16,6 @@ class TodoItem extends React.Component {
     return (
       <div>
         <div onClick={this.handleClick}>{this.props.content}</div>
-        {this.props.msg}
       </div>
     );
   }
@@ -29,7 +28,7 @@ TodoItem.propTypes = {
 };
 
 TodoItem.defaultProps = {
-  msg: "hello world",
+  msg: "",
 };
 
 export default TodoItem;

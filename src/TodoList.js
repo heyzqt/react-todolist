@@ -18,8 +18,12 @@ class ToDoList extends React.Component {
     //建议在componentDidMount中执行网络请求
     axios
       .get("/api/todolist")
-      .then(() => {
-        alert("success");
+      .then((res) => {
+        console.log(res);
+        console.log("list = ", res.data);
+        this.setState(() => ({
+          list: [...res.data],
+        }));
       })
       .catch(() => {
         alert("error");
