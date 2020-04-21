@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import TodoItem from "./TodoItem";
+import axios from "axios";
 
 class ToDoList extends React.Component {
   constructor(props) {
@@ -8,12 +9,28 @@ class ToDoList extends React.Component {
       inputValue: "",
       list: [],
     };
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleBtnClick = this.handleBtnClick.bind(this);
+    this.handleItemDelete = this.handleItemDelete.bind(this);
+  }
+
+  componentDidMount() {
+    //建议在componentDidMount中执行网络请求
+    axios
+      .get("/api/todolist")
+      .then(() => {
+        alert("success");
+      })
+      .catch(() => {
+        alert("error");
+      });
   }
 
   handleInputChange(e) {
-    this.setState({
-      inputValue: e.currentTarget.value,
-    });
+    const value = e.currentTarget.value;
+    this.setState(() => ({
+      inputValue: value,
+    }));
   }
 
   handleBtnClick() {
@@ -21,19 +38,19 @@ class ToDoList extends React.Component {
       alert("值为空或者值格式不对");
       return;
     }
-    this.setState({
-      //   list: this.state.list.concat(this.state.inputValue), //写法一
-      list: [...this.state.list, this.state.inputValue],
+    this.setState((prevSteta) => ({
+      list: [...prevSteta.list, prevSteta.inputValue],
       inputValue: "",
-    });
+    }));
   }
 
   handleItemDelete(index) {
-    const list = [...this.state.list];
-    list.splice(index, 1);
-    this.setState({
-      list: list,
+    this.setState((prevSteta) => {
+      const list = [...prevSteta.list];
+      list.splice(index, 1);
+      return { list };
     });
+
     // 错误的写法，React中不允许直接改变state中的数据(immutable)，会影响React的性能
     // 推荐是使用上面的写法，将state数据拷贝出来作为一个副本，对副本进行操作处理
     // this.state.list.splice(index, 1);
@@ -42,38 +59,39 @@ class ToDoList extends React.Component {
     // });
   }
 
+  //大块的包含逻辑的代码，可以封装成1个组件或者是1个函数，在调用时代码会更清晰优雅
+  getTodoItem() {
+    return this.state.list.map((item, index) => {
+      return (
+        <TodoItem
+          key={index}
+          content={item}
+          pos={index}
+          deleteItem={this.handleItemDelete}
+        ></TodoItem>
+      );
+    });
+  }
+
   render() {
     return (
       <Fragment>
-        {/* //注释第一种写法 */}
-        {
-          //注释的第二种写法
-        }
         {/* label标签和表单组件绑定 */}
-        <label htmlFor="inputArea">输入内容</label>
+        <label
+          htmlFor="inputArea"
+          ref={(label) => {
+            this.label = label;
+          }}
+        >
+          输入内容
+        </label>
         <input
           id="inputArea"
           value={this.state.inputValue}
-          onChange={this.handleInputChange.bind(this)}
+          onChange={this.handleInputChange}
         />
-        <button onClick={this.handleBtnClick.bind(this)}>提交</button>
-        <ul>
-          {this.state.list.map((item, index) => {
-            return (
-              <TodoItem
-                key={index}
-                content={item}
-                pos={index}
-                deleteItem={this.handleItemDelete.bind(this)}
-              ></TodoItem>
-              // <li
-              //   key={index}
-              //   onClick={this.handleItemDelete.bind(this, index)}
-              //   dangerouslySetInnerHTML={{ __html: item }} //加载html
-              // ></li>
-            );
-          })}
-        </ul>
+        <button onClick={this.handleBtnClick}>提交</button>
+        <ul>{this.getTodoItem()}</ul>
       </Fragment>
     );
   }
