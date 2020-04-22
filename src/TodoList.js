@@ -4,7 +4,8 @@ import store from "./store"; //可以不写index.js，React默认会查找文件
 import {
   getInputChangeAction,
   getAddDataAction,
-  getDeleteAction
+  getDeleteAction,
+  initDataAction
 } from "./store/actionCreators";
 import TodoListUI from "./TodoListUI";
 
@@ -17,6 +18,19 @@ class ToDoList extends React.Component {
     this.handleStoreChange = this.handleStoreChange.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
     store.subscribe(this.handleStoreChange);
+  }
+
+  componentDidMount() {
+    //模拟网络请求
+    new Promise((resolve, reject) => {
+      let data = ["hello", "world", "hahahaha"];
+      setTimeout(() => {
+        resolve(data);
+      }, 2000);
+    }).then((data) => {
+      const action = initDataAction(data);
+      store.dispatch(action);
+    });
   }
 
   handleInputChange(e) {
@@ -34,6 +48,7 @@ class ToDoList extends React.Component {
   }
 
   handleDeleteClick(index) {
+    console.log("delete item index = ", index);
     const action = getDeleteAction(index);
     store.dispatch(action);
   }
