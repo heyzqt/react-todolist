@@ -2,6 +2,11 @@ import React from "react";
 import "antd/dist/antd.css";
 import { Input, Button, List } from "antd";
 import store from "./store"; //可以不写index.js，React默认会查找文件目录下的index.js文件
+import {
+  CHANGE_INPUT_DATA,
+  ADD_LIST_DATA,
+  DELETE_LIST_DATA
+} from "./store/actionTypes";
 
 class ToDoList extends React.Component {
   constructor(props) {
@@ -15,15 +20,15 @@ class ToDoList extends React.Component {
 
   handleInputChange(e) {
     const action = {
-      type: "change-input-data",
-      value: e.currentTarget.value,
+      type: CHANGE_INPUT_DATA,
+      value: e.currentTarget.value
     };
     store.dispatch(action);
   }
 
   handleBtnClick() {
     const action = {
-      type: "add-list-data",
+      type: ADD_LIST_DATA
     };
     store.dispatch(action);
   }
@@ -34,8 +39,8 @@ class ToDoList extends React.Component {
 
   handleDeleteClick(index) {
     const action = {
-      type: "delete-list-data",
-      index: index,
+      type: DELETE_LIST_DATA,
+      index: index
     };
     store.dispatch(action);
   }

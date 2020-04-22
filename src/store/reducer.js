@@ -1,24 +1,29 @@
+import {
+  CHANGE_INPUT_DATA,
+  ADD_LIST_DATA,
+  DELETE_LIST_DATA
+} from "./actionTypes";
 const defaultState = {
   inputValue: "input message",
-  list: ["hello", "world"],
+  list: ["hello", "world"]
 };
 
 //reducer 可以接受state，但是不能改变传入的state的值
 export default (state = defaultState, action) => {
-  if (action.type === "change-input-data") {
+  if (action.type === CHANGE_INPUT_DATA) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.inputValue = action.value;
     return newState;
   }
 
-  if (action.type === "add-list-data") {
+  if (action.type === ADD_LIST_DATA) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.list.push(newState.inputValue);
     newState.inputValue = "";
     return newState;
   }
 
-  if (action.type === "delete-list-data") {
+  if (action.type === DELETE_LIST_DATA) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.list.splice(action.index, 1);
     newState.inputValue = "";
