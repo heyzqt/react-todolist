@@ -7,6 +7,29 @@ class ToDoList extends React.Component {
   constructor(props) {
     super(props);
     this.state = store.getState();
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleBtnClick = this.handleBtnClick.bind(this);
+    this.handleStoreChange = this.handleStoreChange.bind(this);
+    store.subscribe(this.handleStoreChange);
+  }
+
+  handleInputChange(e) {
+    const action = {
+      type: "change-input-data",
+      value: e.currentTarget.value,
+    };
+    store.dispatch(action);
+  }
+
+  handleBtnClick() {
+    const action = {
+      type: "add-list-data",
+    };
+    store.dispatch(action);
+  }
+
+  handleStoreChange() {
+    this.setState(store.getState());
   }
 
   render() {
@@ -14,18 +37,16 @@ class ToDoList extends React.Component {
       <div>
         <div>
           <Input
-            placeholder={this.state.inputValue}
-            style={{
-              width: "300px",
-              marginRight: "20px",
-              marginTop: "20px",
-              marginLeft: "20px",
-            }}
+            placeholder="enter something"
+            style={{ width: "300px" }}
+            onChange={this.handleInputChange}
           />
-          <Button type="primary">提交</Button>
+          <Button type="primary" onClick={this.handleBtnClick}>
+            提交
+          </Button>
         </div>
         <List
-          style={{ width: "300px", marginTop: "20px", marginLeft: "20px" }}
+          style={{ width: "300px" }}
           bordered
           dataSource={this.state.list}
           renderItem={(item) => <List.Item>{item}</List.Item>}
