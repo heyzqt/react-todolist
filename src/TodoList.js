@@ -32,11 +32,20 @@ class ToDoList extends React.Component {
     this.setState(store.getState());
   }
 
+  handleDeleteClick(index) {
+    const action = {
+      type: "delete-list-data",
+      index: index,
+    };
+    store.dispatch(action);
+  }
+
   render() {
     return (
       <div>
         <div>
           <Input
+            value={this.state.inputValue}
             placeholder="enter something"
             style={{ width: "300px" }}
             onChange={this.handleInputChange}
@@ -49,7 +58,11 @@ class ToDoList extends React.Component {
           style={{ width: "300px" }}
           bordered
           dataSource={this.state.list}
-          renderItem={(item) => <List.Item>{item}</List.Item>}
+          renderItem={(item, index) => (
+            <List.Item onClick={this.handleDeleteClick.bind(this, index)}>
+              {item}
+            </List.Item>
+          )}
         />
       </div>
     );
