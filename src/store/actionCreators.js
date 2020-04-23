@@ -2,7 +2,8 @@ import {
   CHANGE_INPUT_DATA,
   ADD_LIST_DATA,
   DELETE_LIST_DATA,
-  INIT_LIST_DATA
+  INIT_LIST_DATA,
+  GET_LIST_DATA
 } from "./actionTypes";
 
 export const getInputChangeAction = (value) => ({
@@ -24,17 +25,6 @@ export const initDataAction = (list) => ({
   list
 });
 
-export const getTodoList = () => {
-  return (dispatch) => {
-    //模拟网络请求
-    new Promise((resolve, reject) => {
-      let data = ["hello", "world", "hahahaha"];
-      setTimeout(() => {
-        resolve(data);
-      }, 2000);
-    }).then((data) => {
-      const action = initDataAction(data);
-      dispatch(action);
-    });
-  };
-};
+export const getListDataAction = () => ({
+  type: GET_LIST_DATA
+})

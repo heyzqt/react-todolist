@@ -1,6 +1,9 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import Reducer from "./reducer";
-import thunk from "redux-thunk";
+import createSagaMiddleware from 'redux-saga'
+import todoSages from './sagas'
+
+const sagaMiddleware = createSagaMiddleware()
 
 //添加redux-devtools调试工具
 const composeEnhancers =
@@ -10,8 +13,9 @@ const composeEnhancers =
       })
     : compose;
 
-const enhancer = composeEnhancers(applyMiddleware(thunk));
-
+const enhancer = composeEnhancers(applyMiddleware(sagaMiddleware));
 const store = createStore(Reducer, enhancer);
+
+sagaMiddleware.run(todoSages)
 
 export default store;
