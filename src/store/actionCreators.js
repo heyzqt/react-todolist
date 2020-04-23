@@ -23,3 +23,18 @@ export const initDataAction = (list) => ({
   type: INIT_LIST_DATA,
   list
 });
+
+export const getTodoList = () => {
+  return (dispatch) => {
+    //模拟网络请求
+    new Promise((resolve, reject) => {
+      let data = ["hello", "world", "hahahaha"];
+      setTimeout(() => {
+        resolve(data);
+      }, 2000);
+    }).then((data) => {
+      const action = initDataAction(data);
+      dispatch(action);
+    });
+  };
+};

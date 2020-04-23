@@ -5,7 +5,7 @@ import {
   getInputChangeAction,
   getAddDataAction,
   getDeleteAction,
-  initDataAction
+  getTodoList
 } from "./store/actionCreators";
 import TodoListUI from "./TodoListUI";
 
@@ -21,16 +21,8 @@ class ToDoList extends React.Component {
   }
 
   componentDidMount() {
-    //模拟网络请求
-    new Promise((resolve, reject) => {
-      let data = ["hello", "world", "hahahaha"];
-      setTimeout(() => {
-        resolve(data);
-      }, 2000);
-    }).then((data) => {
-      const action = initDataAction(data);
-      store.dispatch(action);
-    });
+    const action = getTodoList();
+    store.dispatch(action);
   }
 
   handleInputChange(e) {
@@ -48,7 +40,6 @@ class ToDoList extends React.Component {
   }
 
   handleDeleteClick(index) {
-    console.log("delete item index = ", index);
     const action = getDeleteAction(index);
     store.dispatch(action);
   }
