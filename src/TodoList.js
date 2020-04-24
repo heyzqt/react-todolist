@@ -1,30 +1,43 @@
 import React from "react";
 import { connect } from "react-redux";
-import { CHANGE_INPUT_DATA } from "./store/actionTypes";
+import {
+  getChangeDataAction,
+  getAddListAction,
+  getDeleteListAction
+} from "./store/actionCreators";
 
-class TodoList extends React.Component {
-  render() {
-    return (
+const TodoList = (props) => {
+  const {
+    inputValue,
+    list,
+    handleInputChange,
+    handleBtnClick,
+    handleDeleteClick
+  } = props;
+  return (
+    <div>
       <div>
-        <div>
-          <input
-            value={this.props.inputValue}
-            onChange={this.props.handleInputChange}
-          />
-          <button>提交</button>
-        </div>
-        <ul>
-          <li>heyzqt</li>
-        </ul>
+        <input value={inputValue} onChange={handleInputChange} />
+        <button onClick={handleBtnClick}>提交</button>
       </div>
-    );
-  }
-}
+      <ul>
+        {list.map((item, index) => {
+          return (
+            <li key={index} onClick={() => handleDeleteClick(index)}>
+              {item}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
 
 //关联store的值
 const mapStateToProps = (state) => {
   return {
-    inputValue: state.inputValue
+    inputValue: state.inputValue,
+    list: state.list
   };
 };
 
@@ -32,10 +45,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     handleInputChange(e) {
-      const action = {
-        type: CHANGE_INPUT_DATA,
-        value: e.currentTarget.value
-      };
+      const action = getChangeDataAction(e);
+      dispatch(action);
+    },
+    handleBtnClick() {
+      const action = getAddListAction();
+      dispatch(action);
+    },
+    handleDeleteClick(index) {
+      const action = getDeleteListAction(index);
       dispatch(action);
     }
   };
